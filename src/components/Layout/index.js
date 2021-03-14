@@ -25,7 +25,7 @@ const Layout = ({title, urlBg, colorBg, children}) => {
                     </div>
                     <div className={s.desc.full}>
                     {
-                        children && (<p>{children}</p>)
+                        children && (<>{children}</>)
                     }
                     </div>
                 </article>
