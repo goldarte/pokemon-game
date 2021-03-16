@@ -1,7 +1,16 @@
-const GamePage = () => {
+const GamePage = ( {onChangePage} ) => {
+    const handleClick = () => {
+        onChangePage && onChangePage('home');
+    }
+
     return (
         <div>
-            This is Game Page!
+            <header>This is Game Page!</header>
+            <p>
+                <button onClick={handleClick}>
+                    Return to home
+                </button>
+            </p>
         </div>
     );
 };
