@@ -150,7 +150,7 @@ const HomePage = ( {onChangePage} ) => {
     return (
         <>
             <Header title="Pokemon Game" id="header" onClickButton={handleClick}>
-                <a href="https://github.com/goldarte/pokemon-game" style = {{color: 'white'}}>
+                <a href="https://github.com/goldarte/pokemon-game">
                     see sources on Github
                 </a>
             </Header>
