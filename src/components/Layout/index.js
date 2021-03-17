@@ -1,4 +1,5 @@
 import s from './style.module.css';
+import cn from 'classnames'
 
 const Layout = ({title, urlBg, colorBg, children}) => {
     const styleRoot = {
@@ -13,21 +14,17 @@ const Layout = ({title, urlBg, colorBg, children}) => {
         <section className={s.root} style={styleRoot}>
             <div className={s.wrapper}>
                 <article>
-                    <div className={s.title}>
                     {
-                        title && (
-                            <>
+                        title && <div className={s.title}>
                             <h3>{title}</h3>
                             <span className={s.separator}></span>
-                            </>
-                        )
+                        </div>
                     }
-                    </div>
-                    <div className={s.desc.full}>
                     {
-                        children && (<>{children}</>)
+                        children && <div className={cn(s.desc, s.full)}>
+                            {children}
+                        </div>
                     }
-                    </div>
                 </article>
             </div>
         </section>
