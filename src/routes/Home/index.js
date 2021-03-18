@@ -151,10 +151,13 @@ const HomePage = () => {
     }
     return (
         <>
-            <Header title="Pokemon Game" id="header" onClickButton={handleClick}>
+            <Header title="Pokemon Game" id="header">
                 <a href="https://github.com/goldarte/pokemon-game">
                     see sources on Github
                 </a>
+                <button onClick={handleClick}>
+                    Start Game
+                </button>
             </Header>
             <Layout title="Rules" id="rules" urlBg={bg1}>
                 <p>In the game two players face off against one another, one side playing as "blue", the other as "red" on a 3x3 grid.</p>
