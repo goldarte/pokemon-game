@@ -2,8 +2,7 @@ import s from './style.module.css';
 
 const Header = ({title="Default title", children, onClickButton}) => {
     const handleClick = () => {
-        console.log('####: HEADER');
-        onClickButton && onClickButton('game');
+        onClickButton && onClickButton();
     }
     return (
         <header className={s.root}>

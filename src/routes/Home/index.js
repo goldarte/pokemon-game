@@ -1,10 +1,9 @@
 import s from './style.module.css';
+import { useHistory } from 'react-router-dom';
 
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';
-import Footer from '../../components/Footer';
 import PokemonCard from '../../components/PokemonCard';
-import MenuHeader from '../../components/MenuHeader';
 
 import bg1 from '../../assets/bg3.jpg'
 
@@ -143,14 +142,15 @@ const POKEMONS = [
   }
 ];
 
-const HomePage = ( {onChangePage} ) => {
+const HomePage = () => {
+    const history = useHistory()
     const handleClick = (page) => {
-        console.log('####: HOMEPAGE');
-        onChangePage && onChangePage(page);
+        // console.log('####: HOMEPAGE');
+        // onChangePage && onChangePage(page);
+        history.push('/game')
     }
     return (
         <>
-            <MenuHeader />
             <Header title="Pokemon Game" id="header" onClickButton={handleClick}>
                 <a href="https://github.com/goldarte/pokemon-game">
                     see sources on Github
@@ -168,7 +168,6 @@ const HomePage = ( {onChangePage} ) => {
                 }
                 </div>
             </Layout>
-            <Footer />
         </>
     );
 }

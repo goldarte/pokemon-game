@@ -1,14 +1,21 @@
 import cn from 'classnames';
 import s from './style.module.css';
+import { Link } from 'react-router-dom'
+// import { useState } from 'react';
 
-const Menu = ( {active=false} ) => {
+const Menu = ( {active=false, onClickItem} ) => {
+    // const [isActive, setActive] = useState(active)
+
+    const handleClick = () => {
+        onClickItem && onClickItem();
+    }
     const menuList = ['welcome', 'game', 'about', 'contact'];
     const menuItems = menuList.map((name) => {
         return (
-            <li>
-                <a href={"#"+name}>
+            <li key={name}>
+                <Link to={name} onClick={handleClick}>
                     {name.toUpperCase()}
-                </a>
+                </Link>
             </li>
         )
     }

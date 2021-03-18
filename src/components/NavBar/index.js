@@ -1,7 +1,10 @@
 import cn from 'classnames'
 import s from './style.module.css';
+import { useLocation, Link } from 'react-router-dom'
 
 const NavBar = ( {active=false, bgActive=false, onClickMenu} ) => {
+    const location = useLocation();
+
     const handleClick = () => {
         onClickMenu && onClickMenu();
     }
@@ -12,9 +15,9 @@ const NavBar = ( {active=false, bgActive=false, onClickMenu} ) => {
                 <p className={s.brand}>
                     LOGO
                 </p>
-                <a className={cn(s.menuButton, {[s.active]: active})} onClick={handleClick} href="/#">
+                <Link className={cn(s.menuButton, {[s.active]: active})} onClick={handleClick} to={location.pathname}>
                     <span />
-                </a>
+                </Link>
             </div>
         </nav>
     )
