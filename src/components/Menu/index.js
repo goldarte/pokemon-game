@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom'
 // import { useState } from 'react';
 
 const Menu = ( {active=false, onClickItem} ) => {
-    // const [isActive, setActive] = useState(active)
-
     const handleClick = () => {
         onClickItem && onClickItem();
     }
-    const menuList = ['welcome', 'game', 'about', 'contact'];
+
+    const menuList = ['home', 'game', 'about', 'contact'];
     const menuItems = menuList.map((name) => {
         return (
             <li key={name}>
