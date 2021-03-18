@@ -15,7 +15,7 @@ const Menu = ( {active=false} ) => {
 );
 
     return (
-        <div className={cn(s.menuContainer, {[s.active]: active, [s.deactive]: !active})}>
+        <div className={cn(s.menuContainer, {[s.active]: active === true, [s.deactive]: active === false})}>
             <div className={s.overlay}/>
             <div className={s.menuItems}>
                 <ul>

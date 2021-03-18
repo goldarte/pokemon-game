@@ -3,7 +3,7 @@ import Menu from '../Menu';
 import NavBar from '../NavBar';
 
 const MenuHeader = () => {
-    const [isActive, setActive] = useState(false);
+    const [isActive, setActive] = useState(null);
 
     const changeState = () => {
         setActive(prevState => !prevState)
