@@ -151,7 +151,7 @@ const HomePage = () => {
     }
     return (
         <>
-            <Header title="Pokemon Game" id="header">
+            <Header title="Pokemon Game" id="header" man moon>
                 <a href="https://github.com/goldarte/pokemon-game">
                     see sources on Github
                 </a>
