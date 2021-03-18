@@ -1,13 +1,13 @@
 import cn from 'classnames'
 import s from './style.module.css';
 
-const NavBar = ( {active=false, onClickMenu} ) => {
+const NavBar = ( {active=false, bgActive=false, onClickMenu} ) => {
     const handleClick = () => {
         onClickMenu && onClickMenu();
     }
 
     return (
-        <nav className={s.root}>
+        <nav className={cn(s.root, {[s.bgActive]: bgActive})}>
             <div className={s.navWrapper}>
                 <p className={s.brand}>
                     LOGO

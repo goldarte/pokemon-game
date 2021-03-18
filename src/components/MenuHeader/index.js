@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Menu from '../Menu';
 import NavBar from '../NavBar';
 
-const MenuHeader = () => {
+const MenuHeader = ( {bgActive} ) => {
     const [isActive, setActive] = useState(null);
 
     const changeState = () => {
@@ -12,7 +12,7 @@ const MenuHeader = () => {
     return (
         <>
         <Menu active={isActive} />
-        <NavBar active={isActive} onClickMenu={changeState} />
+        <NavBar active={isActive} bgActive={bgActive} onClickMenu={changeState} />
         </>
     )
 }
