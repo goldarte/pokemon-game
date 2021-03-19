@@ -144,17 +144,22 @@ const GamePage = () => {
     const handleClick = () => {
         history.push('/home');
     }
-    const start_pokemons_states = new Map();
-    POKEMONS.forEach(item => {
-        start_pokemons_states.set(item.id, false);
+
+    const pokemons_default = POKEMONS.map((item) => {
+        item['active'] = false;
+        return item;
     });
 
-    const [pokemons_states, set_pokemon_states] = useState(start_pokemons_states);
+    const [pokemons, setPokemons] = useState(pokemons_default);
 
-    console.log(pokemons_states)
+    console.log(pokemons)
 
     const setActive = (id) => {
-        set_pokemon_states(new Map(pokemons_states.set(id, true)));
+        setPokemons(pokemons.map(item =>
+            item.id === id
+            ? {...item, active : true}
+            : item
+        ));
     }
 
     return (
@@ -165,7 +170,7 @@ const GamePage = () => {
             <Layout title="Cards" id="cards" colorBg="202736">
                 <div className={s.flex}>
                 {
-                    POKEMONS.map((item) => <PokemonCard key={item.id} name={item.name} img={item.img} type={item.type} id={item.id} values={item.values} active={pokemons_states.get(item.id)} onClickItem={setActive}/>)
+                    pokemons.map((item) => <PokemonCard key={item.id} name={item.name} img={item.img} type={item.type} id={item.id} values={item.values} active={item.active} onClickItem={setActive}/>)
                 }
                 </div>
             </Layout>
