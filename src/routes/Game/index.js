@@ -12,12 +12,13 @@ const GamePage = () => {
         history.push('/home');
     }
 
-    const [pokemons, setPokemons] = useState([]);
+    const [pokemons, setPokemons] = useState({});
 
     useEffect(() => {
         database.ref('pokemons').once('value', (snapshot) => {
             setPokemons(snapshot.val());
         });
+        setPokemons()
     }, []);
 
     // const pokemons_default = POKEMONS.map((item) => {
@@ -32,6 +33,9 @@ const GamePage = () => {
                 const pokemon = {...item[1]};
                 if (pokemon.id === id) {
                     pokemon.active = true;
+                    database.ref('pokemons/'+ item[0]).set({
+                        ...pokemon
+                    });
                 };
                 acc[item[0]] = pokemon;
                 return acc;
@@ -45,19 +49,19 @@ const GamePage = () => {
                     Return to home
             </button>
             <Layout title="Cards" id="cards" colorBg="202736">
-                <div className={s.flex}>
-                {
-                    Object.entries(pokemons).map(([key, {name, img, type, id, values, active}]) => <PokemonCard 
-                        key={key}
-                        name={name}
-                        img={img}
-                        type={type}
-                        id={id}
-                        values={values}
-                        active={active}
-                        onClickItem={setActive}/>)
-                }
-                </div>
+                { pokemons && <div className={s.flex}>
+                    {
+                        Object.entries(pokemons).map(([key, {name, img, type, id, values, active}]) => <PokemonCard 
+                            key={key}
+                            name={name}
+                            img={img}
+                            type={type}
+                            id={id}
+                            values={values}
+                            active={active}
+                            onClickItem={setActive}/>)
+                    }
+                </div>}
             </Layout>
         </div>
     );
