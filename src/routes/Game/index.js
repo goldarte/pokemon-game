@@ -146,8 +146,7 @@ const GamePage = () => {
     }
 
     const pokemons_default = POKEMONS.map((item) => {
-        item['active'] = false;
-        return item;
+        return { ...item, active: false }
     });
 
     const [pokemons, setPokemons] = useState(pokemons_default);
