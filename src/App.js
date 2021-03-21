@@ -11,12 +11,6 @@ import NotFoundPage from './routes/NotFound';
 import MenuHeader from './components/MenuHeader';
 import Footer from './components/Footer';
 
-import database from './service/firebase';
-
-database.ref('pokemons').once('value', (snapshot) => {
-    console.log('####: snapshot', snapshot.val());
-});
-
 const App = () => {
     const matchRoot = useRouteMatch('/');
     const matchHome = useRouteMatch('/home');
