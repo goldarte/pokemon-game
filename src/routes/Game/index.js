@@ -24,12 +24,7 @@ const GamePage = () => {
         database.ref('pokemons').once('value', (snapshot) => {
             setPokemons(snapshot.val());
         });
-        setPokemons()
     }, []);
-
-    // const pokemons_default = POKEMONS.map((item) => {
-    //     return { ...item, active: false }
-    // });
 
     console.log(pokemons)
 
