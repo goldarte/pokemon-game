@@ -19,8 +19,21 @@ class Firebase {
         this.database = this.fire.database();
     }
 
+    setPokemons = (pokemons) => {
+        return this.database.ref('pokemons').set(pokemons);
+    }
+
     getPokemonsOnce = async () => {
         return await this.database.ref('pokemons').once('value').then(snapshot => snapshot.val());
+    }
+
+    postPokemon = (key, pokemon) => {
+        this.database.ref(`pokemons/${key}`).set(pokemon);
+    }
+
+    addPokemon = (pokemon, callback) => {
+        const newKey = this.database.ref().child('pokemons').push().key;
+        this.database.ref('pokemons/' + newKey).set(pokemon).then(() => callback());
     }
 }
 
