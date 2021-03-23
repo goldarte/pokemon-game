@@ -20,13 +20,17 @@ const GamePage = () => {
 
     const [pokemons, setPokemons] = useState({});
 
-    useEffect(() => {
+    const getPokemons = () => {
         database.ref('pokemons').once('value', (snapshot) => {
             setPokemons(snapshot.val());
         });
+    }
+
+    useEffect(() => {
+        getPokemons();
     }, []);
 
-    console.log(pokemons)
+    // console.log(pokemons)
 
     const setActive = (key) => {
         setPokemons(prevState => {
@@ -58,15 +62,11 @@ const GamePage = () => {
         });
     }
     const addNew = () => {
-        setPokemons(prevState => {
-            const index = getRandomInt(0,5);
-            const new_pokemons = Object.entries(prevState).slice();
-            const selected_pokemon = {...new_pokemons[index][1], active: false};
-            const newKey = database.ref().child('pokemons').push().key;
-            database.ref('pokemons/' + newKey).set(selected_pokemon);
-            new_pokemons.push([newKey, selected_pokemon]);
-            return Object.fromEntries([...new_pokemons]);
-        });
+        const index = getRandomInt(0,5);
+        const new_pokemons = Object.entries(pokemons).slice();
+        const selected_pokemon = {...new_pokemons[index][1], active: false};
+        const newKey = database.ref().child('pokemons').push().key;
+        database.ref('pokemons/' + newKey).set(selected_pokemon).then(() => getPokemons());
     }
 
     return (
