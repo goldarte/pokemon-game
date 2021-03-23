@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from 'react';
 import Layout from '../../components/Layout';
 import PokemonCard from '../../components/PokemonCard';
 
-import database from '../../service/firebase'
 import { FireBaseContext } from '../../context/firebaseContext';
 
 function getRandomInt(min, max) {
@@ -42,6 +41,7 @@ const GamePage = () => {
                 const pokemon_key = item[0];
                 if (pokemon_key === key) {
                     pokemon.active = true;
+                    firebase.postPokemon(key, pokemon);
                     // database.ref('pokemons/'+ pokemon_key).set(pokemon);
                 };
                 acc[item[0]] = pokemon;
@@ -51,25 +51,23 @@ const GamePage = () => {
     }
 
     const resetState = () => {
-        setPokemons(prevState => {
-            const resetStateArr = Object.entries(prevState).slice(0,5);
-            const pokemons_data = Object.fromEntries(resetStateArr);
-            // database.ref('pokemons').set(pokemons_data);
-            return resetStateArr.reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                pokemon.active = false;
-                // database.ref('pokemons/'+ item[0]).set(pokemon);
-                acc[item[0]] = pokemon;
-                return acc;
-            }, {});
-        });
+        const resetStateArr = Object.entries(pokemons).slice(0,5);
+        const pokemons_data = resetStateArr.reduce((acc, item) => {
+            const pokemon = {...item[1], active: false};
+            acc[item[0]] = pokemon;
+            return acc;
+        }, {});
+        firebase.setPokemons(pokemons_data);
+        getPokemons();
     }
+
     const addNew = () => {
         const index = getRandomInt(0,5);
         const new_pokemons = Object.entries(pokemons).slice();
         const selected_pokemon = {...new_pokemons[index][1], active: false};
-        // const newKey = database.ref().child('pokemons').push().key;
-        // database.ref('pokemons/' + newKey).set(selected_pokemon).then(() => getPokemons());
+        firebase.addPokemon(selected_pokemon, async () => {
+            await getPokemons();
+        });
     }
 
     return (
