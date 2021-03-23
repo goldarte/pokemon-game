@@ -23,13 +23,10 @@ const GamePage = () => {
 
     const [pokemons, setPokemons] = useState({});
 
-    const getPokemons = async () => {
-        const response = await firebase.getPokemonsOnce();
-        setPokemons(response);
-    }
-
     useEffect(() => {
-        getPokemons();
+        firebase.getPokemonSocket((pokemons) => {
+            setPokemons(pokemons);
+        })
     }, []);
 
     // console.log(pokemons)
@@ -58,16 +55,13 @@ const GamePage = () => {
             return acc;
         }, {});
         firebase.setPokemons(pokemons_data);
-        getPokemons();
     }
 
     const addNew = () => {
         const index = getRandomInt(0,5);
         const new_pokemons = Object.entries(pokemons).slice();
         const selected_pokemon = {...new_pokemons[index][1], active: false};
-        firebase.addPokemon(selected_pokemon, async () => {
-            await getPokemons();
-        });
+        firebase.addPokemon(selected_pokemon);
     }
 
     return (
