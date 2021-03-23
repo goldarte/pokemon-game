@@ -11,6 +11,9 @@ import NotFoundPage from './routes/NotFound';
 import MenuHeader from './components/MenuHeader';
 import Footer from './components/Footer';
 
+import {FireBaseContext} from "./context/firebaseContext";
+import Firebase from './service/firebase';
+
 const App = () => {
     const matchRoot = useRouteMatch('/');
     const matchHome = useRouteMatch('/home');
@@ -18,27 +21,29 @@ const App = () => {
     const matchContact = useRouteMatch('/contact');
     const match = matchRoot.isExact || matchHome || matchAbout || matchContact;
     return (
-        <Switch>
-            <Route path='/404' component={NotFoundPage} />
-            <Route>
-                <>
-                <MenuHeader bgActive={!match}/>
-                <div className={cn(s.wrap, {[s.isHomePage]: match})}>
-                    <Switch>
-                        <Route path="/" exact component={HomePage} />
-                        <Route path="/home" component={HomePage} />
-                        <Route path="/game" component={GamePage} />
-                        <Route path="/about" component={AboutPage} />
-                        <Route path="/contact" component={ContactPage} />
-                        <Route render={() => (
-                            <Redirect to='/404'/>
-                        )} />
-                    </Switch>
-                </div>
-                <Footer />
-                </>
-            </Route>
-        </Switch>
+        <FireBaseContext.Provider value={new Firebase()}>
+            <Switch>
+                <Route path='/404' component={NotFoundPage} />
+                <Route>
+                    <>
+                    <MenuHeader bgActive={!match}/>
+                    <div className={cn(s.wrap, {[s.isHomePage]: match})}>
+                        <Switch>
+                            <Route path="/" exact component={HomePage} />
+                            <Route path="/home" component={HomePage} />
+                            <Route path="/game" component={GamePage} />
+                            <Route path="/about" component={AboutPage} />
+                            <Route path="/contact" component={ContactPage} />
+                            <Route render={() => (
+                                <Redirect to='/404'/>
+                            )} />
+                        </Switch>
+                    </div>
+                    <Footer />
+                    </>
+                </Route>
+            </Switch>
+        </FireBaseContext.Provider>
     )
 
   // const [page, setPage] = useState('app');
