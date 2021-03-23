@@ -19,6 +19,12 @@ class Firebase {
         this.database = this.fire.database();
     }
 
+    getPokemonSocket = (callback) => {
+        this.database.ref('pokemons').on('value', (snapshot) => {
+            callback(snapshot.val());
+        });
+    }
+
     setPokemons = (pokemons) => {
         return this.database.ref('pokemons').set(pokemons);
     }
