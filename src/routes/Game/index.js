@@ -1,177 +1,100 @@
 import s from './style.module.css';
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import PokemonCard from '../../components/PokemonCard';
 
-const POKEMONS = [
-    {
-      "abilities": [
-        "keen-eye",
-        "tangled-feet",
-        "big-pecks"
-      ],
-      "stats": {
-        "hp": 63,
-        "attack": 60,
-        "defense": 55,
-        "special-attack": 50,
-        "special-defense": 50,
-        "speed": 71
-      },
-      "type": "flying",
-      "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png",
-      "name": "pidgeotto",
-      "base_experience": 122,
-      "height": 11,
-      "id": 17,
-      "values": {
-        "top": "A",
-        "right": 2,
-        "bottom": 7,
-        "left": 5
-      }
-    },
-    {
-      "abilities": [
-        "intimidate",
-        "shed-skin",
-        "unnerve"
-      ],
-      "stats": {
-        "hp": 60,
-        "attack": 95,
-        "defense": 69,
-        "special-attack": 65,
-        "special-defense": 79,
-        "speed": 80
-      },
-      "type": "poison",
-      "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/24.png",
-      "name": "arbok",
-      "base_experience": 157,
-      "height": 35,
-      "id": 24,
-      "values": {
-        "top": 5,
-        "right": 9,
-        "bottom": "A",
-        "left": "A"
-      }
-    },
-    {
-      "abilities": [
-        "static",
-        "lightning-rod"
-      ],
-      "stats": {
-        "hp": 35,
-        "attack": 55,
-        "defense": 40,
-        "special-attack": 50,
-        "special-defense": 50,
-        "speed": 90
-      },
-      "type": "electric",
-      "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "name": "pikachu",
-      "base_experience": 112,
-      "height": 4,
-      "id": 25,
-      "values": {
-        "top": 8,
-        "right": "A",
-        "bottom": 9,
-        "left": 6
-      }
-    },
-    {
-      "abilities": [
-        "overgrow",
-        "chlorophyll"
-      ],
-      "stats": {
-        "hp": 45,
-        "attack": 49,
-        "defense": 49,
-        "special-attack": 65,
-        "special-defense": 65,
-        "speed": 45
-      },
-      "type": "grass",
-      "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      "name": "bulbasaur",
-      "base_experience": 64,
-      "height": 7,
-      "id": 1,
-      "values": {
-        "top": 8,
-        "right": 4,
-        "bottom": 2,
-        "left": 7
-      }
-    },
-    {
-      "abilities": [
-        "blaze",
-        "solar-power"
-      ],
-      "stats": {
-        "hp": 39,
-        "attack": 52,
-        "defense": 43,
-        "special-attack": 60,
-        "special-defense": 50,
-        "speed": 65
-      },
-      "type": "fire",
-      "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png",
-      "name": "charmander",
-      "base_experience": 62,
-      "height": 6,
-      "id": 4,
-      "values": {
-        "top": 7,
-        "right": 6,
-        "bottom": 1,
-        "left": 4
-      }
-    }
-  ];
+import database from '../../service/firebase'
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+}
 
 const GamePage = () => {
     const history = useHistory();
-    const handleClick = () => {
+    const returnHome = () => {
         history.push('/home');
     }
 
-    const pokemons_default = POKEMONS.map((item) => {
-        return { ...item, active: false }
-    });
+    const [pokemons, setPokemons] = useState({});
 
-    const [pokemons, setPokemons] = useState(pokemons_default);
+    const getPokemons = () => {
+        database.ref('pokemons').once('value', (snapshot) => {
+            setPokemons(snapshot.val());
+        });
+    }
 
-    console.log(pokemons)
+    useEffect(() => {
+        getPokemons();
+    }, []);
 
-    const setActive = (id) => {
-        setPokemons(pokemons.map(item =>
-            item.id === id
-            ? {...item, active : true}
-            : item
-        ));
+    // console.log(pokemons)
+
+    const setActive = (key) => {
+        setPokemons(prevState => {
+            return Object.entries(prevState).reduce((acc, item) => {
+                const pokemon = {...item[1]};
+                const pokemon_key = item[0];
+                if (pokemon_key === key) {
+                    pokemon.active = true;
+                    database.ref('pokemons/'+ pokemon_key).set(pokemon);
+                };
+                acc[item[0]] = pokemon;
+                return acc;
+            }, {});
+        });
+    }
+
+    const resetState = () => {
+        setPokemons(prevState => {
+            const resetStateArr = Object.entries(prevState).slice(0,5);
+            const pokemons_data = Object.fromEntries(resetStateArr);
+            database.ref('pokemons').set(pokemons_data);
+            return resetStateArr.reduce((acc, item) => {
+                const pokemon = {...item[1]};
+                pokemon.active = false;
+                database.ref('pokemons/'+ item[0]).set(pokemon);
+                acc[item[0]] = pokemon;
+                return acc;
+            }, {});
+        });
+    }
+    const addNew = () => {
+        const index = getRandomInt(0,5);
+        const new_pokemons = Object.entries(pokemons).slice();
+        const selected_pokemon = {...new_pokemons[index][1], active: false};
+        const newKey = database.ref().child('pokemons').push().key;
+        database.ref('pokemons/' + newKey).set(selected_pokemon).then(() => getPokemons());
     }
 
     return (
         <div>
-            <button onClick={handleClick}>
-                    Return to home
+            <button onClick={returnHome}>
+                Return to home
+            </button>
+            <button onClick={resetState}>
+                Reset state
+            </button>
+            <button onClick={addNew}>
+                Add new pokemon
             </button>
             <Layout title="Cards" id="cards" colorBg="202736">
-                <div className={s.flex}>
-                {
-                    pokemons.map((item) => <PokemonCard key={item.id} name={item.name} img={item.img} type={item.type} id={item.id} values={item.values} active={item.active} onClickItem={setActive}/>)
-                }
-                </div>
+                { pokemons && <div className={s.flex}>
+                    {
+                        Object.entries(pokemons).map(([key, {name, img, type, id, values, active}]) => <PokemonCard 
+                            key={key}
+                            name={name}
+                            img={img}
+                            type={type}
+                            id={id}
+                            values={values}
+                            active={active}
+                            db_key={key}
+                            onClickItem={setActive}/>)
+                    }
+                </div>}
             </Layout>
         </div>
     );

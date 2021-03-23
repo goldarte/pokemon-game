@@ -4,10 +4,10 @@ import cn from 'classnames'
 
 import cardBack from '../../assets/card-back-side.jpg';
 
-const PokemonCard = ({name, img, type, id, values, active, onClickItem}) => {
+const PokemonCard = ({name, img, type, id, values, active, db_key, onClickItem}) => {
 
     const handleClick = () => {
-        onClickItem && onClickItem(id);
+        onClickItem && onClickItem(db_key);
     }
     return (
     <div className={s.root} onClick={handleClick}>
