@@ -16,12 +16,15 @@ function getRandomInt(min, max) {
 const StartPage = () => {
     const firebase = useContext(FireBaseContext);
     const selected_pokemons = useContext(PokemonContext);
-    console.log('#### selected pokemons:', selected_pokemons);
-    console.log('#### firebase: ', firebase)
+    // console.log('#### selected pokemons:', selected_pokemons);
+    // console.log('#### firebase: ', firebase)
 
     const history = useHistory();
     const returnHome = () => {
         history.push('/home');
+    }
+    const startGame = () => {
+        history.push('/game/board');
     }
 
     const [pokemons, setPokemons] = useState({});
@@ -34,7 +37,7 @@ const StartPage = () => {
         return () => firebase.offPokemonSocket();
     }, []);
 
-    console.log('####pokemons: ', pokemons);
+    // console.log('####pokemons: ', pokemons);
 
     const setActive = (key, selected) => {
         setPokemons(prevState => {
@@ -43,11 +46,11 @@ const StartPage = () => {
                 const pokemon_key = item[0];
                 if (pokemon_key === key) {
                     pokemon.active = true;
+                    firebase.postPokemon(key, pokemon);
                     selected ? selected_pokemons.addPokemon(key, pokemon) : selected_pokemons.removePokemon(key);
                     // database.ref('pokemons/'+ pokemon_key).set(pokemon);
                 };
                 acc[item[0]] = pokemon;
-                firebase.postPokemon(key, pokemon);
                 return acc;
             }, {});
         });
@@ -76,11 +79,8 @@ const StartPage = () => {
             <button onClick={returnHome}>
                 Return to home
             </button>
-            <button onClick={resetState}>
-                Reset state
-            </button>
-            <button onClick={addNew}>
-                Add new pokemon
+            <button onClick={startGame}>
+                Start Game
             </button>
         </div>
         <Layout title="Select 5 cards" id="cards" colorBg="202736">
