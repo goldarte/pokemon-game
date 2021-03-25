@@ -10,7 +10,7 @@ const PokemonCard = ({name, img, type, id, values, active, db_key, minimize, cla
         onClickItem && onClickItem(db_key, selected);
     }
     return (
-        <div className={cn(className, s.pokemonCard, {[s.active]: active})} onClick={handleClick}>
+        <div className={cn(className, s.pokemonCard, {[s.active]: active, [s.selected]: selected})} onClick={handleClick}>
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
                     <div className={cn(s.pokemon, s[type])}>
