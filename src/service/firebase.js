@@ -25,6 +25,10 @@ class Firebase {
         });
     }
 
+    offPokemonSocket = () => {
+        this.database.ref('pokemons').off();
+    }
+
     setPokemons = (pokemons) => {
         return this.database.ref('pokemons').set(pokemons);
     }

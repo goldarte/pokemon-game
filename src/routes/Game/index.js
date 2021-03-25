@@ -1,98 +1,34 @@
-import s from './style.module.css';
-import { useHistory } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
-import Layout from '../../components/Layout';
-import PokemonCard from '../../components/PokemonCard';
+import { useRouteMatch, Route, Switch } from 'react-router-dom';
+import StartPage from './routes/Start';
+import BoardPage from './routes/Board';
+import FinishPage from './routes/Finish';
+import {PokemonContext} from '../../context/pokemonContext';
 
-import { FireBaseContext } from '../../context/firebaseContext';
+class SelectedPokemons {
+    constructor () {
+        this.pokemons = new Map();
+    }
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+    addPokemon = (key, pokemon) => {
+        this.pokemons.set(key, pokemon);
+    }
+
+    removePokemon = (key) => {
+        this.pokemons.delete(key);
+    }
 }
 
 const GamePage = () => {
-    const firebase = useContext(FireBaseContext);
-    console.log('####: firebase', firebase)
-
-    const history = useHistory();
-    const returnHome = () => {
-        history.push('/home');
-    }
-
-    const [pokemons, setPokemons] = useState({});
-
-    useEffect(() => {
-        firebase.getPokemonSocket((pokemons) => {
-            setPokemons(pokemons);
-        })
-    }, []);
-
-    // console.log(pokemons)
-
-    const setActive = (key) => {
-        setPokemons(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                const pokemon_key = item[0];
-                if (pokemon_key === key) {
-                    pokemon.active = true;
-                    firebase.postPokemon(key, pokemon);
-                    // database.ref('pokemons/'+ pokemon_key).set(pokemon);
-                };
-                acc[item[0]] = pokemon;
-                return acc;
-            }, {});
-        });
-    }
-
-    const resetState = () => {
-        const resetStateArr = Object.entries(pokemons).slice(0,5);
-        const pokemons_data = resetStateArr.reduce((acc, item) => {
-            const pokemon = {...item[1], active: false};
-            acc[item[0]] = pokemon;
-            return acc;
-        }, {});
-        firebase.setPokemons(pokemons_data);
-    }
-
-    const addNew = () => {
-        const index = getRandomInt(0,5);
-        const new_pokemons = Object.entries(pokemons).slice();
-        const selected_pokemon = {...new_pokemons[index][1], active: false};
-        firebase.addPokemon(selected_pokemon);
-    }
-
+    const match = useRouteMatch();
     return (
-        <div>
-            <button onClick={returnHome}>
-                Return to home
-            </button>
-            <button onClick={resetState}>
-                Reset state
-            </button>
-            <button onClick={addNew}>
-                Add new pokemon
-            </button>
-            <Layout title="Cards" id="cards" colorBg="202736">
-                { pokemons && <div className={s.flex}>
-                    {
-                        Object.entries(pokemons).map(([key, {name, img, type, id, values, active}]) => <PokemonCard 
-                            key={key}
-                            name={name}
-                            img={img}
-                            type={type}
-                            id={id}
-                            values={values}
-                            active={active}
-                            db_key={key}
-                            onClickItem={setActive}/>)
-                    }
-                </div>}
-            </Layout>
-        </div>
+        <PokemonContext.Provider value = {new SelectedPokemons()}>
+            <Switch>
+                <Route path={`${match.path}/`} exact component={StartPage} />
+                <Route path={`${match.path}/board`} component={BoardPage} />
+                <Route path={`${match.path}/finish`} component={FinishPage} />
+            </Switch>
+        </PokemonContext.Provider>
     );
 };
 
-export default GamePage
+export default GamePage;
