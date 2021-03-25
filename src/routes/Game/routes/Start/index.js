@@ -40,11 +40,13 @@ const StartPage = () => {
     // console.log('####pokemons: ', pokemons);
 
     const setSelected = (key) => {
-        selected_pokemons.onSelectedPokemons(key, {...pokemons[key]});
-        setPokemons(prevState => ({
-            ...prevState,
-            [key]: {...prevState[key], selected: !prevState[key].selected}
-        }));
+        if (Object.keys(selected_pokemons.pokemons).length < 5 || pokemons[key].selected) {
+            selected_pokemons.onSelectedPokemons(key, {...pokemons[key]});
+            setPokemons(prevState => ({
+                ...prevState,
+                [key]: {...prevState[key], selected: !prevState[key].selected}
+            }));
+        }
     }
 
     // const resetState = () => {
@@ -70,7 +72,10 @@ const StartPage = () => {
             <button onClick={returnHome}>
                 Return to home
             </button>
-            <button onClick={startGame}>
+            <button
+                onClick={startGame}
+                disabled={Object.keys(selected_pokemons.pokemons).length<5}
+            >
                 Start Game
             </button>
         </div>
