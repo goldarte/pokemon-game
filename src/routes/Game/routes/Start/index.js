@@ -16,7 +16,7 @@ function getRandomInt(min, max) {
 const StartPage = () => {
     const firebase = useContext(FireBaseContext);
     const selected_pokemons = useContext(PokemonContext);
-    // console.log('#### selected pokemons:', selected_pokemons);
+    console.log('#### selected pokemons:', selected_pokemons);
     // console.log('#### firebase: ', firebase)
 
     const history = useHistory();
@@ -39,39 +39,29 @@ const StartPage = () => {
 
     // console.log('####pokemons: ', pokemons);
 
-    const setActive = (key, selected) => {
-        setPokemons(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                const pokemon_key = item[0];
-                if (pokemon_key === key) {
-                    pokemon.active = true;
-                    firebase.postPokemon(key, pokemon);
-                    selected ? selected_pokemons.addPokemon(key, pokemon) : selected_pokemons.removePokemon(key);
-                    // database.ref('pokemons/'+ pokemon_key).set(pokemon);
-                };
-                acc[item[0]] = pokemon;
-                return acc;
-            }, {});
-        });
+    const setSelected = (key) => {
+        setPokemons(prevState => ({
+            ...prevState,
+            [key]: {...prevState[key], selected: !prevState[key].selected}
+        }));
     }
 
-    const resetState = () => {
-        const resetStateArr = Object.entries(pokemons).slice(0,5);
-        const pokemons_data = resetStateArr.reduce((acc, item) => {
-            const pokemon = {...item[1], active: false};
-            acc[item[0]] = pokemon;
-            return acc;
-        }, {});
-        firebase.setPokemons(pokemons_data);
-    }
+    // const resetState = () => {
+    //     const resetStateArr = Object.entries(pokemons).slice(0,5);
+    //     const pokemons_data = resetStateArr.reduce((acc, item) => {
+    //         const pokemon = {...item[1], active: false};
+    //         acc[item[0]] = pokemon;
+    //         return acc;
+    //     }, {});
+    //     firebase.setPokemons(pokemons_data);
+    // }
 
-    const addNew = () => {
-        const index = getRandomInt(0,5);
-        const new_pokemons = Object.entries(pokemons).slice();
-        const selected_pokemon = {...new_pokemons[index][1], active: false};
-        firebase.addPokemon(selected_pokemon);
-    }
+    // const addNew = () => {
+    //     const index = getRandomInt(0,5);
+    //     const new_pokemons = Object.entries(pokemons).slice();
+    //     const selected_pokemon = {...new_pokemons[index][1], active: false};
+    //     firebase.addPokemon(selected_pokemon);
+    // }
 
     return (
         <>
@@ -86,7 +76,7 @@ const StartPage = () => {
         <Layout title="Select 5 cards" id="cards" colorBg="202736">
             <div className={s.flex}>
                 {
-                    Object.entries(pokemons).map(([key, {name, img, type, id, values, active}]) => <PokemonCard
+                    Object.entries(pokemons).map(([key, {name, img, type, id, values, selected}]) => <PokemonCard
                         className={s.card}
                         key={key}
                         name={name}
@@ -95,13 +85,13 @@ const StartPage = () => {
                         id={id}
                         values={values}
                         active={true}
+                        selected={selected}
                         db_key={key}
-                        onClickItem={setActive}/>)
+                        onClickItem={() => setSelected(key)}/>)
                 }
             </div>
         </Layout>
         </>
-        
     );
 };
 

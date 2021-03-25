@@ -2,12 +2,10 @@ import s from './style.module.css';
 import cn from 'classnames';
 import { useState } from 'react';
 
-const PokemonCard = ({name, img, type, id, values, active, db_key, minimize, className, onClickItem}) => {
-    const [selected, setSelected] = useState(false);
+const PokemonCard = ({name, img, type, id, values, active, selected, db_key, minimize, className, onClickItem}) => {
 
     const handleClick = () => {
-        active && setSelected(prev_state => !prev_state);
-        onClickItem && onClickItem(db_key, selected);
+        onClickItem && onClickItem();
     }
     return (
         <div className={cn(className, s.pokemonCard, {[s.active]: active, [s.selected]: selected})} onClick={handleClick}>
