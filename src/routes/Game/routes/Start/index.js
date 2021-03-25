@@ -40,6 +40,7 @@ const StartPage = () => {
     // console.log('####pokemons: ', pokemons);
 
     const setSelected = (key) => {
+        selected_pokemons.onSelectedPokemons(key, {...pokemons[key]});
         setPokemons(prevState => ({
             ...prevState,
             [key]: {...prevState[key], selected: !prevState[key].selected}
