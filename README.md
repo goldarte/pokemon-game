@@ -1,4 +1,4 @@
-# Pokemon Game from ZarMarathon
+# Pokemon Game from ZarMarathon.
 
 Simple card game written on React.
 
