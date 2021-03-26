@@ -10,7 +10,7 @@ const BoardPage = () => {
         <div className={s.root}>
             <div className={s.playerOne}>
                 {
-                    Object.entries(pokemons).map(([key, {name, img, type, id, values, active}]) => <PokemonCard
+                    Object.entries(pokemons).map(([key, {name, img, type, id, values}]) => <PokemonCard
                         key={key}
                         className={s.card}
                         name={name}
@@ -18,7 +18,7 @@ const BoardPage = () => {
                         type={type}
                         id={id}
                         values={values}
-                        active={true}
+                        active
                         minimize/>)
                 }
             </div>
