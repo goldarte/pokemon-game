@@ -1,9 +1,9 @@
 import cn from 'classnames';
 import s from './style.module.css';
 import { Link } from 'react-router-dom'
-// import { useState } from 'react';
 
 const Menu = ( {active=false, onClickItem} ) => {
+
     const handleClick = () => {
         onClickItem && onClickItem();
     }
@@ -12,9 +12,7 @@ const Menu = ( {active=false, onClickItem} ) => {
     const menuItems = menuList.map((name) => {
         return (
             <li key={name}>
-                <Link to={name} onClick={handleClick}>
-                    {name.toUpperCase()}
-                </Link>
+                <Link to={'/'+name} onClick={handleClick}>{name.toUpperCase()}</Link>
             </li>
         )
     }
