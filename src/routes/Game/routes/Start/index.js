@@ -34,6 +34,10 @@ const StartPage = () => {
             setPokemons(pokemons);
         })
 
+        setPokemons(prevState => (Object.entries(prevState).reduce(([key, pokemon]) => ({
+            key: {...pokemon, selected: false}
+        }), {})));
+
         return () => firebase.offPokemonSocket();
     }, []);
 

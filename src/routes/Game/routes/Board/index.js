@@ -1,10 +1,14 @@
 import s from './style.module.css';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import PokemonCard from '../../../../components/PokemonCard';
 import { PokemonContext } from '../../../../context/pokemonContext';
 
 const BoardPage = () => {
-    const {pokemons} = useContext(PokemonContext);
+    const {pokemons, resetSelectedPokemons} = useContext(PokemonContext);
+
+    useEffect(() => {
+        return () => resetSelectedPokemons();
+    }, []);
 
     return (
         <div className={s.root}>
