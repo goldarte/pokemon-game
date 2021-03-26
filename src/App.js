@@ -1,4 +1,4 @@
-import { useRouteMatch, Route, Switch, Redirect } from 'react-router-dom';
+import { useLocation, Route, Switch, Redirect } from 'react-router-dom';
 import cn from 'classnames';
 import s from './style.module.css'
 
@@ -15,11 +15,13 @@ import {FireBaseContext} from "./context/firebaseContext";
 import Firebase from './service/firebase';
 
 const App = () => {
-    const matchRoot = useRouteMatch('/');
-    const matchHome = useRouteMatch('/home');
-    const matchAbout = useRouteMatch('/about');
-    const matchContact = useRouteMatch('/contact');
-    const match = matchRoot.isExact || matchHome || matchAbout || matchContact;
+    const location_path = useLocation().pathname
+    const matchRoot = location_path === '/';
+    const matchHome = location_path ==='/home';
+    const matchAbout = location_path ==='/about';
+    const matchContact = location_path ==='/contact';
+    const matchBoardPage = location_path ==='/game/board';
+    const match = matchRoot || matchHome || matchAbout || matchContact || matchBoardPage;
     return (
         <FireBaseContext.Provider value={new Firebase()}>
             <Switch>
