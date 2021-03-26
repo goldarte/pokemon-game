@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import Header from '../../components/Header'
+import Header from '../../components/Header';
 
 const ContactPage = () => {
     const history = useHistory();
@@ -18,4 +18,4 @@ const ContactPage = () => {
     );
 };
 
-export default ContactPage
+export default ContactPage;

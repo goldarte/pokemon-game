@@ -1,4 +1,4 @@
-import { useRouteMatch, Route, Switch, Redirect } from 'react-router-dom';
+import { useLocation, Route, Switch, Redirect } from 'react-router-dom';
 import cn from 'classnames';
 import s from './style.module.css'
 
@@ -11,34 +11,41 @@ import NotFoundPage from './routes/NotFound';
 import MenuHeader from './components/MenuHeader';
 import Footer from './components/Footer';
 
+import {FireBaseContext} from "./context/firebaseContext";
+import Firebase from './service/firebase';
+
 const App = () => {
-    const matchRoot = useRouteMatch('/');
-    const matchHome = useRouteMatch('/home');
-    const matchAbout = useRouteMatch('/about');
-    const matchContact = useRouteMatch('/contact');
-    const match = matchRoot.isExact || matchHome || matchAbout || matchContact;
+    const location_path = useLocation().pathname
+    const matchRoot = location_path === '/';
+    const matchHome = location_path ==='/home';
+    const matchAbout = location_path ==='/about';
+    const matchContact = location_path ==='/contact';
+    const matchBoardPage = location_path ==='/game/board';
+    const match = matchRoot || matchHome || matchAbout || matchContact || matchBoardPage;
     return (
-        <Switch>
-            <Route path='/404' component={NotFoundPage} />
-            <Route>
-                <>
-                <MenuHeader bgActive={!match}/>
-                <div className={cn(s.wrap, {[s.isHomePage]: match})}>
-                    <Switch>
-                        <Route path="/" exact component={HomePage} />
-                        <Route path="/home" component={HomePage} />
-                        <Route path="/game" component={GamePage} />
-                        <Route path="/about" component={AboutPage} />
-                        <Route path="/contact" component={ContactPage} />
-                        <Route render={() => (
-                            <Redirect to='/404'/>
-                        )} />
-                    </Switch>
-                </div>
-                <Footer />
-                </>
-            </Route>
-        </Switch>
+        <FireBaseContext.Provider value={new Firebase()}>
+            <Switch>
+                <Route path='/404' component={NotFoundPage} />
+                <Route>
+                    <>
+                    <MenuHeader bgActive={!match}/>
+                    <div className={cn(s.wrap, {[s.isHomePage]: match})}>
+                        <Switch>
+                            <Route path="/" exact component={HomePage} />
+                            <Route path="/home" component={HomePage} />
+                            <Route path="/game" component={GamePage} />
+                            <Route path="/about" component={AboutPage} />
+                            <Route path="/contact" component={ContactPage} />
+                            <Route render={() => (
+                                <Redirect to='/404'/>
+                            )} />
+                        </Switch>
+                    </div>
+                    <Footer />
+                    </>
+                </Route>
+            </Switch>
+        </FireBaseContext.Provider>
     )
 
   // const [page, setPage] = useState('app');

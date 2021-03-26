@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
-import Header from '../../components/Header';
+import Header from '../../../../components/Header';
 
-const AboutPage = () => {
+const FinishPage = () => {
     const history = useHistory();
     const handleClick = () => {
         history.push('/home');
@@ -18,4 +18,4 @@ const AboutPage = () => {
     );
 };
 
-export default AboutPage;
+export default FinishPage;
