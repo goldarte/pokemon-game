@@ -2,6 +2,7 @@ import s from './style.module.css';
 import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PokemonCard from '../../../../components/PokemonCard';
+import PlayerBoard from './component/PlayerBoard';
 import { PokemonContext } from '../../../../context/pokemonContext';
 
 const BoardPage = () => {
@@ -35,18 +36,7 @@ const BoardPage = () => {
     return (
         <div className={s.root}>
             <div className={s.playerOne}>
-                {
-                    Object.entries(pokemons).map(([key, {name, img, type, id, values}]) => <PokemonCard
-                        key={key}
-                        className={s.card}
-                        name={name}
-                        img={img}
-                        type={type}
-                        id={id}
-                        values={values}
-                        active
-                        minimize/>)
-                }
+                <PlayerBoard cards={Object.values(pokemons)} />
             </div>
             <div className={s.board}>
                 {
@@ -64,18 +54,7 @@ const BoardPage = () => {
                 }
             </div>
             <div className={s.playerTwo}>
-                {
-                    player2.map(({name, img, type, id, values}) => <PokemonCard
-                        key={id}
-                        className={s.card}
-                        name={name}
-                        img={img}
-                        type={type}
-                        id={id}
-                        values={values}
-                        active
-                        minimize/>)
-                }
+                <PlayerBoard cards={player2}/>
             </div>
         </div>
     );
