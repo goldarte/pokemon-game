@@ -7,11 +7,15 @@ import { PokemonContext } from '../../../../context/pokemonContext';
 
 const BoardPage = () => {
     const {pokemons} = useContext(PokemonContext);
+
     const [board, setBoard] = useState([]);
     const [player2, setPlayer2] = useState([]);
+    const [choiseCard, setChoiseCard] = useState(null);
 
     console.log('#### board', board);
     console.log('#### Player 2', player2);
+    console.log('#### choise card', choiseCard);
+
 
     const history = useHistory();
 
@@ -36,7 +40,10 @@ const BoardPage = () => {
     return (
         <div className={s.root}>
             <div className={s.playerOne}>
-                <PlayerBoard cards={Object.values(pokemons)} />
+                <PlayerBoard
+                    cards={Object.values(pokemons)}
+                    onClickCard={(card)=>setChoiseCard(card)}
+                />
             </div>
             <div className={s.board}>
                 {
@@ -54,7 +61,10 @@ const BoardPage = () => {
                 }
             </div>
             <div className={s.playerTwo}>
-                <PlayerBoard cards={player2}/>
+                <PlayerBoard
+                    cards={player2}
+                    onClickCard={(card)=>setChoiseCard(card)}
+                />
             </div>
         </div>
     );
