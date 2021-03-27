@@ -5,7 +5,7 @@ import PokemonCard from '../../../../components/PokemonCard';
 import { PokemonContext } from '../../../../context/pokemonContext';
 
 const BoardPage = () => {
-    const {pokemons, resetSelectedPokemons} = useContext(PokemonContext);
+    const {pokemons} = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
     const [player2, setPlayer2] = useState([]);
 

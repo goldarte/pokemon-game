@@ -38,6 +38,8 @@ const StartPage = () => {
             key: {...pokemon, selected: false}
         }), {})));
 
+        selected_pokemons.resetSelectedPokemons();
+
         return () => firebase.offPokemonSocket();
     }, []);
 
