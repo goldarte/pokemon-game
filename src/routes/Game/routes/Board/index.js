@@ -1,14 +1,36 @@
 import s from './style.module.css';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PokemonCard from '../../../../components/PokemonCard';
 import { PokemonContext } from '../../../../context/pokemonContext';
 
 const BoardPage = () => {
     const {pokemons, resetSelectedPokemons} = useContext(PokemonContext);
+    const [board, setBoard] = useState([]);
+    const [player2, setPlayer2] = useState([]);
 
-    useEffect(() => {
-        return () => resetSelectedPokemons();
+    console.log('#### board', board);
+    console.log('#### Player 2', player2);
+
+    const history = useHistory();
+
+    if (Object.keys(pokemons).length === 0) {
+        history.replace('/game');
+    }
+
+    useEffect( async () => {
+        const boardResponse = await fetch('https://reactmarathon-api.netlify.app/api/board');
+        const boardRequest = await boardResponse.json();
+        setBoard(boardRequest.data);
+
+        const player2Response = await fetch('https://reactmarathon-api.netlify.app/api/create-player');
+        const player2Request = await player2Response.json();
+        setPlayer2(player2Request.data);
     }, []);
+
+    const handleClickBoardPlate = (position) => {
+        console.log('#### position', position);
+    }
 
     return (
         <div className={s.root}>
@@ -27,15 +49,33 @@ const BoardPage = () => {
                 }
             </div>
             <div className={s.board}>
-                <div className={s.boardPlate}>1</div>
-                <div className={s.boardPlate}>2</div>
-                <div className={s.boardPlate}>3</div>
-                <div className={s.boardPlate}>4</div>
-                <div className={s.boardPlate}>5</div>
-                <div className={s.boardPlate}>6</div>
-                <div className={s.boardPlate}>7</div>
-                <div className={s.boardPlate}>8</div>
-                <div className={s.boardPlate}>9</div>
+                {
+                    board.map(item => (
+                        <div
+                            key={item.position}
+                            className={s.boardPlate}
+                            onClick={() => !item.card && handleClickBoardPlate(item.position)}
+                        >
+                            {
+                                item.card && <PokemonCard {...item} minimize/>
+                            }
+                        </div>
+                    ))
+                }
+            </div>
+            <div className={s.playerTwo}>
+                {
+                    player2.map(({name, img, type, id, values}) => <PokemonCard
+                        key={id}
+                        className={s.card}
+                        name={name}
+                        img={img}
+                        type={type}
+                        id={id}
+                        values={values}
+                        active
+                        minimize/>)
+                }
             </div>
         </div>
     );
