@@ -3,7 +3,7 @@ import PokemonCard from '../../../../../../components/PokemonCard';
 import cn from 'classnames';
 import s from './style.module.css';
 
-const PlayerBoard = ( {cards, onClickCard} ) => {
+const PlayerBoard = ( {player, cards, onClickCard} ) => {
     const [selected, setSelected] = useState(null);
     return (
         <div>
@@ -14,7 +14,7 @@ const PlayerBoard = ( {cards, onClickCard} ) => {
                     })}
                         onClick={() => {
                             setSelected(item.id);
-                            onClickCard && onClickCard(item);
+                            onClickCard && onClickCard( {player, ...item});
                         }}
                     >
                         <PokemonCard
