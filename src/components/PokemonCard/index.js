@@ -2,7 +2,7 @@ import s from './style.module.css';
 import cn from 'classnames';
 import { useState } from 'react';
 
-const PokemonCard = ({name, img, type, id, values, active, selected, db_key, minimize, className, onClickItem}) => {
+const PokemonCard = ({name, img, type, id, values, active, selected, db_key, minimize, className, onClickItem, possession}) => {
 
     const handleClick = () => {
         onClickItem && onClickItem();
@@ -11,7 +11,7 @@ const PokemonCard = ({name, img, type, id, values, active, selected, db_key, min
         <div className={cn(className, s.pokemonCard, {[s.active]: active, [s.selected]: selected})} onClick={handleClick}>
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
-                    <div className={cn(s.pokemon, s[type])}>
+                    <div className={cn(s.pokemon, s[type], s[possession])}>
                         <div className={s.values}>
                             <div className={cn(s.count, s.top)}>{values.top}</div>
                             <div className={cn(s.count, s.right)}>{values.right}</div>
