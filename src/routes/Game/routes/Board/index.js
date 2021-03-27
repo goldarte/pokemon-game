@@ -5,6 +5,21 @@ import PokemonCard from '../../../../components/PokemonCard';
 import PlayerBoard from './component/PlayerBoard';
 import { PokemonContext } from '../../../../context/pokemonContext';
 
+const counterWin = (board, player1, player2) => {
+    let player1Count = player1.length;
+    let player2Count = player2.length;
+    board.forEach(item => {
+        if (item.card.possession === 'blue') {
+            player1Count++;
+        }
+        if (item.card.possession === 'red') {
+            player2Count++;
+        }
+    });
+
+    return [player1Count, player2Count];
+}
+
 const BoardPage = () => {
     const {pokemons} = useContext(PokemonContext);
 
@@ -17,10 +32,12 @@ const BoardPage = () => {
     });
     const [player2, setPlayer2] = useState([]);
     const [choiseCard, setChoiseCard] = useState(null);
+    const [steps, setSteps] = useState(0);
 
     console.log('#### board', board);
     console.log('#### Player 2', player2);
     console.log('#### choise card', choiseCard);
+    console.log('#### steps:', steps)
 
 
     const history = useHistory();
@@ -63,8 +80,31 @@ const BoardPage = () => {
             const request = await res.json();
             console.log('#### request', request);
             setBoard(request.data);
+
+            if (choiseCard.player === 1) {
+                setPlayer1(prevState => prevState.filter(item => item.id != choiseCard.id));
+            }
+
+            if (choiseCard.player === 2) {
+                setPlayer2(prevState => prevState.filter(item => item.id != choiseCard.id));
+            }
+
+            setSteps(prevSteps => { return prevSteps+1 });
         }
     }
+
+    useEffect(() => {
+        if (steps === 9) {
+            const [count1, count2] = counterWin(board, player1, player2);
+            if (count1 > count2) {
+                alert('YOU WIN!');
+            } else if (count2 > count1) {
+                alert('YOU LOSE!');
+            } else {
+                alert('DRAW!');
+            }
+        }
+    }, [steps])
 
     return (
         <div className={s.root}>
